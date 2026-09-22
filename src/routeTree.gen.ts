@@ -14,6 +14,9 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RedirectRouteImport } from './routes/redirect'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SignupIndexRouteImport } from './routes/signup.index'
+import { Route as SignupBuyerRouteImport } from './routes/signup.buyer'
+import { Route as SignupFarmerRouteImport } from './routes/signup.farmer'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +43,21 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupIndexRoute = SignupIndexRouteImport.update({
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupBuyerRoute = SignupBuyerRouteImport.update({
+  id: '/signup/buyer',
+  path: '/signup/buyer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupFarmerRoute = SignupFarmerRouteImport.update({
+  id: '/signup/farmer',
+  path: '/signup/farmer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +65,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/redirect': typeof RedirectRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/signup/buyer': typeof SignupBuyerRoute
+  '/signup/farmer': typeof SignupFarmerRoute
+  '/signup/': typeof SignupIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +75,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/redirect': typeof RedirectRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/signup/buyer': typeof SignupBuyerRoute
+  '/signup/farmer': typeof SignupFarmerRoute
+  '/signup': typeof SignupIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +86,31 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/redirect': typeof RedirectRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/signup/buyer': typeof SignupBuyerRoute
+  '/signup/farmer': typeof SignupFarmerRoute
+  '/signup/': typeof SignupIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/forgot-password' | '/login' | '/redirect' | '/reset-password'
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/redirect'
+    | '/reset-password'
+    | '/signup/buyer'
+    | '/signup/farmer'
+    | '/signup/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/redirect' | '/reset-password'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/redirect'
+    | '/reset-password'
+    | '/signup/buyer'
+    | '/signup/farmer'
+    | '/signup'
   id:
     | '__root__'
     | '/'
@@ -76,6 +118,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/redirect'
     | '/reset-password'
+    | '/signup/buyer'
+    | '/signup/farmer'
+    | '/signup/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -84,6 +129,9 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RedirectRoute: typeof RedirectRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SignupBuyerRoute: typeof SignupBuyerRoute
+  SignupFarmerRoute: typeof SignupFarmerRoute
+  SignupIndexRoute: typeof SignupIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -123,6 +171,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup/': {
+      id: '/signup/'
+      path: '/signup'
+      fullPath: '/signup/'
+      preLoaderRoute: typeof SignupIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup/buyer': {
+      id: '/signup/buyer'
+      path: '/signup/buyer'
+      fullPath: '/signup/buyer'
+      preLoaderRoute: typeof SignupBuyerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup/farmer': {
+      id: '/signup/farmer'
+      path: '/signup/farmer'
+      fullPath: '/signup/farmer'
+      preLoaderRoute: typeof SignupFarmerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -132,6 +201,9 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RedirectRoute: RedirectRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SignupBuyerRoute: SignupBuyerRoute,
+  SignupFarmerRoute: SignupFarmerRoute,
+  SignupIndexRoute: SignupIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
