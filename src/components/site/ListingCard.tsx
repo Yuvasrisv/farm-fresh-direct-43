@@ -28,13 +28,17 @@ export function ListingCard({
   listing,
   favorite,
   onToggleFavorite,
+  offerPercent,
 }: {
   listing: ListingCardData;
   favorite?: boolean;
   onToggleFavorite?: (id: string) => void;
+  offerPercent?: number;
 }) {
   const cart = useCart();
   const image = listing.images?.[0] || PLACEHOLDER_IMAGE;
+  const offer = offerPercent ?? 0;
+  const offerPrice = offer > 0 ? Math.round(Number(listing.price) * (1 - offer / 100)) : Number(listing.price);
 
   return (
     <article className="field-card group flex flex-col overflow-hidden transition-shadow hover:shadow-lift">
@@ -52,6 +56,11 @@ export function ListingCard({
         <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">
           {listing.category}
         </span>
+        {offer > 0 ? (
+          <span className="absolute right-3 top-3 rounded-full bg-harvest px-2.5 py-1 text-[11px] font-bold text-harvest-foreground">
+            {offer}% OFF
+          </span>
+        ) : null}
       </Link>
 
       <div className="flex flex-1 flex-col p-4">
@@ -91,11 +100,16 @@ export function ListingCard({
 
         <div className="mt-4 flex items-end justify-between gap-2">
           <p className="font-display text-xl text-primary">
-            {formatMoney(listing.price)}
+            {formatMoney(offerPrice)}
             <span className="text-xs font-normal text-muted-foreground">
               {" "}
               / {listing.unit}
             </span>
+            {offer > 0 ? (
+              <span className="ml-1.5 align-middle text-xs font-normal text-muted-foreground line-through">
+                {formatMoney(listing.price)}
+              </span>
+            ) : null}
           </p>
           <Button
             size="sm"
@@ -105,7 +119,7 @@ export function ListingCard({
               cart.add({
                 listingId: listing.id,
                 name: listing.name,
-                price: Number(listing.price),
+                price: offerPrice,
                 unit: listing.unit,
                 farmerId: listing.farmer_id,
                 farmerName: listing.farmerName,
