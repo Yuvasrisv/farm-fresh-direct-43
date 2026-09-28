@@ -41,7 +41,7 @@ function offerFor(id: string): number {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
   const bucket = hash % 4; // 0..3
-  return [0, 5, 10, 15][bucket];
+  return [0, 5, 10, 15][bucket] ?? 0;
 }
 
 type SortKey = "newest" | "price-asc" | "price-desc";
