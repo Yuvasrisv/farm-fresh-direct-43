@@ -82,11 +82,12 @@ function Browse() {
 
   return (
     <SiteShell>
-      <PageHeader
-        eyebrow="Marketplace"
-        title="Browse fresh produce"
-        description="Every listing comes straight from a farm. Prices are set by the grower — no middleman markup."
-      />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-10">
+        <PageHeader
+          title="Browse fresh produce"
+          subtitle="Every listing comes straight from a farm. Prices are set by the grower — no middleman markup."
+        />
+      </div>
 
       {/* Filters */}
       <section className="mx-auto w-full max-w-6xl px-4">
