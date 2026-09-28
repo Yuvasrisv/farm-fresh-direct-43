@@ -119,7 +119,7 @@ export function ListingCard({
               cart.add({
                 listingId: listing.id,
                 name: listing.name,
-                price: Number(listing.price),
+                price: offerPrice,
                 unit: listing.unit,
                 farmerId: listing.farmer_id,
                 farmerName: listing.farmerName,
