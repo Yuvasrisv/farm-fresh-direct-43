@@ -28,13 +28,17 @@ export function ListingCard({
   listing,
   favorite,
   onToggleFavorite,
+  offerPercent,
 }: {
   listing: ListingCardData;
   favorite?: boolean;
   onToggleFavorite?: (id: string) => void;
+  offerPercent?: number;
 }) {
   const cart = useCart();
   const image = listing.images?.[0] || PLACEHOLDER_IMAGE;
+  const offer = offerPercent ?? 0;
+  const offerPrice = offer > 0 ? Math.round(Number(listing.price) * (1 - offer / 100)) : Number(listing.price);
 
   return (
     <article className="field-card group flex flex-col overflow-hidden transition-shadow hover:shadow-lift">
