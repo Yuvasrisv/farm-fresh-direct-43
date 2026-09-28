@@ -1,0 +1,34 @@
+-- Demo farmers (auth users; the signup trigger creates their profile/role/farm rows)
+insert into auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at, raw_user_meta_data)
+values
+  ('f1111111-1111-1111-1111-111111111111','00000000-0000-0000-0000-000000000000','authenticated','authenticated','ramesh@farmlink.demo', crypt('farmlink-demo', gen_salt('bf')), now(), now(), now(), '{"role":"farmer","full_name":"Ramesh Patil","phone":"+91 98220 12345","farm_name":"Patil Organic Farms","location":"Nashik, Maharashtra","crops":"Tomatoes, Onions, Grapes"}'),
+  ('f2222222-2222-2222-2222-222222222222','00000000-0000-0000-0000-000000000000','authenticated','authenticated','lakshmi@farmlink.demo', crypt('farmlink-demo', gen_salt('bf')), now(), now(), now(), '{"role":"farmer","full_name":"Lakshmi Devi","phone":"+91 94440 67890","farm_name":"Green Valley Farm","location":"Coimbatore, Tamil Nadu","crops":"Bananas, Greens, Coconut"}'),
+  ('f3333333-3333-3333-3333-333333333333','00000000-0000-0000-0000-000000000000','authenticated','authenticated','gurpreet@farmlink.demo', crypt('farmlink-demo', gen_salt('bf')), now(), now(), now(), '{"role":"farmer","full_name":"Gurpreet Singh","phone":"+91 98765 43210","farm_name":"Singh Dairy & Grains","location":"Ludhiana, Punjab","crops":"Wheat, Rice, Milk"}'),
+  ('f4444444-4444-4444-4444-444444444444','00000000-0000-0000-0000-000000000000','authenticated','authenticated','anita@farmlink.demo', crypt('farmlink-demo', gen_salt('bf')), now(), now(), now(), '{"role":"farmer","full_name":"Anita Sharma","phone":"+91 90000 11122","farm_name":"Himalayan Orchard","location":"Shimla, Himachal Pradesh","crops":"Apples, Plums, Walnuts"}')
+on conflict (id) do nothing;
+
+insert into auth.identities (id, user_id, provider_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
+select id, id, id::text, jsonb_build_object('sub', id::text, 'email', email), 'email', now(), now(), now()
+from auth.users where email like '%@farmlink.demo'
+on conflict (provider, provider_id) do nothing;
+
+-- Demo listings
+insert into public.listings (farmer_id, name, category, price, unit, quantity, harvest_date, description, images, status) values
+('f1111111-1111-1111-1111-111111111111','Desi Tomatoes','Vegetables',32,'kg',500,current_date - 1,'Firm, juicy desi tomatoes picked at dawn. Great for curries and salads.',array['https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f1111111-1111-1111-1111-111111111111','Red Onions','Vegetables',28,'kg',800,current_date - 3,'Pungent Nashik red onions, cured and ready for storage.',array['https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f1111111-1111-1111-1111-111111111111','Green Grapes','Fruits',85,'kg',200,current_date,'Seedless Thompson grapes, sweet and crisp.',array['https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f1111111-1111-1111-1111-111111111111','Baby Potatoes','Vegetables',24,'kg',600,current_date - 2,'Tender baby potatoes, perfect for roasting.',array['https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f2222222-2222-2222-2222-222222222222','Robusta Bananas','Fruits',45,'dozen',150,current_date,'Naturally ripened robusta bananas, no carbide used.',array['https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f2222222-2222-2222-2222-222222222222','Fresh Spinach','Vegetables',30,'bundle',120,current_date,'Tender palak leaves, cut this morning.',array['https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f2222222-2222-2222-2222-222222222222','Tender Coconuts','Fruits',35,'piece',300,current_date - 1,'Sweet water coconuts straight from the grove.',array['https://images.unsplash.com/photo-1580984969071-a8da5656c2fb?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f2222222-2222-2222-2222-222222222222','Curry Leaves','Spices',15,'bundle',80,current_date,'Aromatic fresh curry leaves.',array['https://images.unsplash.com/photo-1615485500834-bc10199bc727?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f3333333-3333-3333-3333-333333333333','Basmati Rice','Grains',95,'kg',1000,current_date - 10,'Aged one-year basmati, long grain and fragrant.',array['https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f3333333-3333-3333-3333-333333333333','Whole Wheat','Grains',38,'kg',1200,current_date - 15,'Stone-ground ready whole wheat, high protein.',array['https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f3333333-3333-3333-3333-333333333333','Farm Fresh Milk','Dairy',62,'litre',100,current_date,'Full-cream cow milk, delivered within hours of milking.',array['https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f3333333-3333-3333-3333-333333333333','Desi Ghee','Dairy',650,'litre',40,current_date - 5,'Slow-churned A2 desi ghee from grass-fed cows.',array['https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f4444444-4444-4444-4444-444444444444','Royal Gala Apples','Fruits',140,'kg',400,current_date - 4,'Crisp, sweet Gala apples from high-altitude orchards.',array['https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f4444444-4444-4444-4444-444444444444','Himachal Plums','Fruits',110,'kg',150,current_date - 2,'Juicy red plums, tree-ripened.',array['https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f4444444-4444-4444-4444-444444444444','Shelled Walnuts','Other',900,'kg',60,current_date - 20,'Hand-shelled kernels, light halves.',array['https://images.unsplash.com/photo-1508061253366-f7da158b6d46?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f2222222-2222-2222-2222-222222222222','Turmeric Fingers','Spices',180,'kg',90,current_date - 30,'Sun-dried Erode turmeric, high curcumin.',array['https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f1111111-1111-1111-1111-111111111111','Green Chillies','Vegetables',40,'kg',100,current_date,'Medium-spicy fresh green chillies.',array['https://images.unsplash.com/photo-1583119912267-cc97c911e416?auto=format&fit=crop&w=800&q=70'],'approved'),
+('f3333333-3333-3333-3333-333333333333','Toor Dal','Pulses',145,'kg',500,current_date - 12,'Unpolished toor dal, cooks fast and creamy.',array['https://images.unsplash.com/photo-1585996746344-5d0b0b0b0b0b?auto=format&fit=crop&w=800&q=70'],'approved');
