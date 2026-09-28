@@ -56,6 +56,11 @@ export function ListingCard({
         <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">
           {listing.category}
         </span>
+        {offer > 0 ? (
+          <span className="absolute right-3 top-3 rounded-full bg-harvest px-2.5 py-1 text-[11px] font-bold text-harvest-foreground">
+            {offer}% OFF
+          </span>
+        ) : null}
       </Link>
 
       <div className="flex flex-1 flex-col p-4">
@@ -95,11 +100,16 @@ export function ListingCard({
 
         <div className="mt-4 flex items-end justify-between gap-2">
           <p className="font-display text-xl text-primary">
-            {formatMoney(listing.price)}
+            {formatMoney(offerPrice)}
             <span className="text-xs font-normal text-muted-foreground">
               {" "}
               / {listing.unit}
             </span>
+            {offer > 0 ? (
+              <span className="ml-1.5 align-middle text-xs font-normal text-muted-foreground line-through">
+                {formatMoney(listing.price)}
+              </span>
+            ) : null}
           </p>
           <Button
             size="sm"
